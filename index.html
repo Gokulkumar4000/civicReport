@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Incident Report Feed</title>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Public+Sans:wght@400;500;700;900" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#1193d4",
+            "background-light": "#f6f7f8",
+            "background-dark": "#101c22",
+          },
+          fontFamily: {
+            "display": ["Public Sans"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="max-w-md mx-auto">
+<header class="sticky top-0 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm z-10">
+<div class="flex items-center justify-between p-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-zinc-900 dark:text-white">location_on</span>
+<h1 class="text-xl font-bold text-zinc-900 dark:text-white">San Francisco</h1>
+</div>
+<button class="p-2 rounded-full hover:bg-primary/10">
+<span class="material-symbols-outlined text-zinc-900 dark:text-white">notifications</span>
+</button>
+</div>
+<div class="px-4 pb-4">
+<div class="flex items-center gap-4">
+<img alt="Anonymous user avatar" class="w-14 h-14 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCy998_EKxMaodnFCM8aGsWCxqi8SsKu6gsG48ne88fWm1bNMk43V28HtDYo8t0PkB7AMs8roscESwJag_Y96UrEbBN8iU3IVziBjwXm511zu_DJslJhAR4dtoxsKCqAHW60ahzRZK1BR16xclouoPwcZjPJAy3F81zFP3_Il4cofZXoFBcvE-PqZPD9VDMtqI_P0HhLCRIndc_tiS8KtucDgU4TUCBZI1nXrx1atpwM6cMwFsjoCadNmbqv_CMUDVDvo_F6BjKohwJ"/>
+<div class="flex-grow">
+<p class="font-bold text-zinc-900 dark:text-white">Anonymous</p>
+<p class="text-sm text-zinc-500 dark:text-zinc-400">Post an incident to the community</p>
+</div>
+<a href="./post.html"><button class="px-6 py-2.5 font-bold text-white bg-primary rounded-full">Post</button></a>
+</div>
+</div>
+<div class="px-4 pb-2">
+<h2 class="text-lg font-bold text-zinc-900 dark:text-white">Recent Reports</h2>
+</div>
+</header>
+<main class="divide-y divide-zinc-200 dark:divide-zinc-800 pb-16">
+<article class="bg-background-light dark:bg-background-dark">
+<div class="p-4">
+<div class="relative">
+<img alt="Image of a car accident" class="w-full h-auto rounded-lg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKrRKwTR3s8QJ_JXCdwNU_kRxBiGJExextkaPgCJSBO9eoWxpCJ3GTlHqIyT3rke0YoEI8JRgyKnXvKHQPPt0rwxMgBO78asBaZ1kBmKxAH8fToVxEq5vtYDzMVg3znQzeLT6ZdwxtNArcEE5x4yICmNlFiNQkSueJY6nIDHed3FRdxCcD6Y15jCjKbzXSXECldieVOp9xx81j3usnP00e19Kzp9HFYNrJ2KEOkryIpxayhzKjgBc7V4UT9WlPWcClFQjoLupzln5F"/>
+<button class="absolute top-2 right-2 px-4 py-2 text-sm font-semibold text-zinc-900 bg-background-light/70 dark:bg-background-dark/70 dark:text-white rounded-full backdrop-blur-sm">Report</button>
+</div>
+<div class="pt-4">
+<h3 class="text-lg font-bold text-zinc-900 dark:text-white">Car Accident</h3>
+<p class="mt-1 text-zinc-600 dark:text-zinc-400"> A car accident occurred at the intersection of Main St and Oak Ave. Minor injuries reported. Traffic is congested. <button class="text-primary font-semibold">read more</button> </p>
+<p class="text-sm text-zinc-500 dark:text-zinc-400 mt-1">123 Main St, San Francisco</p>
+</div>
+</div>
+<div class="flex justify-around py-2">
+<button class="flex items-center gap-2 px-3 py-2 text-zinc-600 dark:text-zinc-400 hover:bg-primary/10 rounded-full">
+<span class="material-symbols-outlined">thumb_up</span>
+<span class="text-sm font-semibold">23</span>
+</button>
+<button class="flex items-center gap-2 px-3 py-2 text-zinc-600 dark:text-zinc-400 hover:bg-primary/10 rounded-full">
+<span class="material-symbols-outlined">bookmark</span>
+<span class="text-sm font-semibold">12</span>
+</button>
+<button class="flex items-center gap-2 px-3 py-2 text-zinc-600 dark:text-zinc-400 hover:bg-primary/10 rounded-full">
+<span class="material-symbols-outlined">share</span>
+<span class="text-sm font-semibold">5</span>
+</button>
+</div>
+</article>
+<article class="bg-background-light dark:bg-background-dark">
+<div class="p-4">
+<div class="relative">
+<img alt="Image of a gas leak warning" class="w-full h-auto rounded-lg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnUiT9rIF35Tp9X5q01zN2BHDcQIpKRBFTRDSJlPvctZpCN-cFO6IRQCkLywHR0RuvsqD3NEBqlUdO8CWz4bU--AWEe2raQ5lzNRh4xOnuPKZqFCN0J3I0OWeosJUfhqvRyp7rmyiclVQZcREQ4qAkrWxTSRkplq2wiyHlRZttE8hpTtpYWckEgn_QrBaPPh1HJWngKKUi6NJvEDURj_odywrcTAW-StPSp8yDRl-64PETaABLyHP7Q0KjnEugISYlyceeBfMMQpmv"/>
+<button class="absolute top-2 right-2 px-4 py-2 text-sm font-semibold text-zinc-900 bg-background-light/70 dark:bg-background-dark/70 dark:text-white rounded-full backdrop-blur-sm">Report</button>
+</div>
+<div class="pt-4">
+<h3 class="text-lg font-bold text-zinc-900 dark:text-white">Gas Leak</h3>
+<p class="mt-1 text-zinc-600 dark:text-zinc-400"> A gas leak has been reported at 456 Elm St. Residents are advised to evacuate the area immediately. Emergency services are on site. <button class="text-primary font-semibold">read more</button> </p>
+<p class="text-sm text-zinc-500 dark:text-zinc-400 mt-1">456 Elm St, San Francisco</p>
+</div>
+</div>
+<div class="flex justify-around py-2">
+<button class="flex items-center gap-2 px-3 py-2 text-zinc-600 dark:text-zinc-400 hover:bg-primary/10 rounded-full">
+<span class="material-symbols-outlined">thumb_up</span>
+<span class="text-sm font-semibold">18</span>
+</button>
+<button class="flex items-center gap-2 px-3 py-2 text-zinc-600 dark:text-zinc-400 hover:bg-primary/10 rounded-full">
+<span class="material-symbols-outlined">bookmark</span>
+<span class="text-sm font-semibold">8</span>
+</button>
+<button class="flex items-center gap-2 px-3 py-2 text-zinc-600 dark:text-zinc-400 hover:bg-primary/10 rounded-full">
+<span class="material-symbols-outlined">share</span>
+<span class="text-sm font-semibold">3</span>
+</button>
+</div>
+</article>
+<article class="bg-background-light dark:bg-background-dark">
+<div class="p-4">
+<div class="relative">
+<img alt="Image related to suspicious activity" class="w-full h-auto rounded-lg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAn_mm3MeI_4kCwnHnuzFQdj4FOtU4AXSz0vKSozz6NCc60k_CFggFTYRQgfepUYkMB2MOY7Yr5wyw7W3-yH3vYSGpbX0J2ublZ7EEPEdRjevos2HFShQBads8uJ-RLy7QS5xBfd7lrDKl-wiVWUOJDiSynZdg2KUgtItoZRH1iEuwuTTBCz1hJzETO015pCM4yKMx0tuXg8CjshJ258H-g4E_p6Y2kVDlg2OckAySHJHTKON3u9u7pLI9EN3BjqhUnd7ubqZSIlW6a"/>
+<button class="absolute top-2 right-2 px-4 py-2 text-sm font-semibold text-zinc-900 bg-background-light/70 dark:bg-background-dark/70 dark:text-white rounded-full backdrop-blur-sm">Report</button>
+</div>
+<div class="pt-4">
+<h3 class="text-lg font-bold text-zinc-900 dark:text-white">Suspicious Activity</h3>
+<p class="mt-1 text-zinc-600 dark:text-zinc-400"> Suspicious activity reported near the park. A group of individuals were seen loitering and behaving erratically. Police have been notified. <button class="text-primary font-semibold">read more</button> </p>
+<p class="text-sm text-zinc-500 dark:text-zinc-400 mt-1">789 Pine St, San Francisco</p>
+</div>
+</div>
+<div class="flex justify-around py-2">
+<button class="flex items-center gap-2 px-3 py-2 text-zinc-600 dark:text-zinc-400 hover:bg-primary/10 rounded-full">
+<span class="material-symbols-outlined">thumb_up</span>
+<span class="text-sm font-semibold">15</span>
+</button>
+<button class="flex items-center gap-2 px-3 py-2 text-zinc-600 dark:text-zinc-400 hover:bg-primary/10 rounded-full">
+<span class="material-symbols-outlined">bookmark</span>
+<span class="text-sm font-semibold">10</span>
+</button>
+<button class="flex items-center gap-2 px-3 py-2 text-zinc-600 dark:text-zinc-400 hover:bg-primary/10 rounded-full">
+<span class="material-symbols-outlined">share</span>
+<span class="text-sm font-semibold">2</span>
+</button>
+</div>
+</article>
+</main>
+<footer class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm border-t border-zinc-200 dark:border-zinc-800">
+<nav class="flex justify-around items-center h-16">
+<a class="flex flex-col items-center justify-center w-1/4 h-full text-primary" href="./index.html">
+<span class="material-symbols-outlined">home</span>
+<span class="text-xs font-bold">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center w-1/4 h-full text-zinc-500 dark:text-zinc-400 hover:text-primary" href="./report.html">
+<span class="material-symbols-outlined">description</span>
+<span class="text-xs font-medium">Report</span>
+</a>
+<a class="flex flex-col items-center justify-center w-1/4 h-full text-zinc-500 dark:text-zinc-400 hover:text-primary" href="./post.html">
+<span class="material-symbols-outlined">photo_camera</span>
+<span class="text-xs font-medium">Camera</span>
+</a>
+<a class="flex flex-col items-center justify-center w-1/4 h-full text-zinc-500 dark:text-zinc-400 hover:text-primary" href="./profile.html">
+<span class="material-symbols-outlined">person</span>
+<span class="text-xs font-medium">Profile</span>
+</a>
+</nav>
+</footer>
+</div>
+
+</body></html>

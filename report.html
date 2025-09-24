@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Incident Report</title>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Public+Sans:wght@400;500;700;900" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1193d4",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101c22",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="flex flex-col h-screen justify-between">
+<main class="flex-1 overflow-y-auto">
+<header class="sticky top-0 z-10 bg-background-light dark:bg-background-dark/80 backdrop-blur-sm">
+<div class="flex items-center p-4">
+<button class="p-2 -ml-2 text-gray-800 dark:text-gray-200">
+<span class="material-symbols-outlined">
+                            arrow_back_ios_new
+                        </span>
+</button>
+<h1 class="text-xl font-bold text-gray-900 dark:text-white flex-1 text-center pr-10">Report</h1>
+</div>
+</header>
+<div class="p-4 space-y-6">
+<div class="bg-white dark:bg-background-dark/50 p-6 rounded-xl shadow-sm">
+<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Cases Solved</p>
+<p class="text-4xl font-bold text-gray-900 dark:text-white mt-1">120</p>
+</div>
+<div class="flex h-12 items-center justify-center rounded-full bg-gray-200 dark:bg-background-dark/50 p-1">
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-full px-4 text-sm font-medium has-[:checked]:bg-primary has-[:checked]:text-white text-gray-600 dark:text-gray-300 has-[:checked]:dark:text-white transition-all duration-300">
+<span class="truncate">Reported</span>
+<input checked="" class="invisible w-0" name="status-filter" type="radio" value="Reported"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-full px-4 text-sm font-medium has-[:checked]:bg-primary has-[:checked]:text-white text-gray-600 dark:text-gray-300 has-[:checked]:dark:text-white transition-all duration-300">
+<span class="truncate">Pending</span>
+<input class="invisible w-0" name="status-filter" type="radio" value="Pending"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-full px-4 text-sm font-medium has-[:checked]:bg-primary has-[:checked]:text-white text-gray-600 dark:text-gray-300 has-[:checked]:dark:text-white transition-all duration-300">
+<span class="truncate">Solved</span>
+<input class="invisible w-0" name="status-filter" type="radio" value="Solved"/>
+</label>
+</div>
+<div class="space-y-4">
+<div class="flex items-start gap-4 rounded-lg bg-white dark:bg-background-dark/50 p-4 shadow-sm">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-16" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA0FtOjxyarrQ_2eDoZ262JchQlURpyIQPCIki9FZpcPaON05XCGo3nj43HHyGppWvbSD_fNHaIKA-MTfOa4UFq5NieHkpBUxfPmDgJdKLUGv8PsN6x32tlQGUCOig74bssIN5VdsC049px8Fk1kgEDRIvJcCSSTw5D4iGz1ANx6sdcYm2RovPkFLJ7xgTx8Zj9D5q7zG3ghYStG-HeWsLSIL47jLJ2vuOinM__TIK3QToiBCa1B0wAcyz0YMy1SmcDPJJPjOVJrriq");'></div>
+<div class="flex-1">
+<p class="font-bold text-gray-800 dark:text-white">Vandalism at the park</p>
+<p class="text-sm text-gray-500 dark:text-gray-400 mt-1"><span class="font-medium text-green-500">Status: Solved</span></p>
+<p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Reported on 2023-09-15</p>
+</div>
+<button class="p-2 text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+<div class="flex items-start gap-4 rounded-lg bg-white dark:bg-background-dark/50 p-4 shadow-sm">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-16" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDDhw3IGs5WT7wB0oyJl1JPiCcQlz5pn-SefZHAj1Ed-nBwpIqE2KjDwJMcUyOvuVvZZarhwjGRRHuHGhZEINzFWcvCyATaL_QEKRsCdh75xplYFkUO5EomlqFvscv2BBnSLpG8nqjMcctinu9EQlb8ijENIggyR2Ago5rz0sNkW5dN8BAN7VAU-jyThDUkqVxkwMQ4uMtFw1iGTOz2tplXxCYdUl7uc5e5c1lTTbOo4QumgfX_ib2Q8dF5n0xHFOWPuE_suRbAhfxl");'></div>
+<div class="flex-1">
+<p class="font-bold text-gray-800 dark:text-white">Noise complaint</p>
+<p class="text-sm text-gray-500 dark:text-gray-400 mt-1"><span class="font-medium text-yellow-500">Status: Pending</span></p>
+<p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Reported on 2023-09-10</p>
+</div>
+<button class="p-2 text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+<div class="flex items-start gap-4 rounded-lg bg-white dark:bg-background-dark/50 p-4 shadow-sm">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-16" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBknzdglaiXvkJ_rQJ1gNgzzMwEjojlLQpKz3xd1khM7EnGCVEz5BYgHozheQJraWgind9dXMGK84gJdzfefjvyERM0b1N_qQqBzY31KsoC5bsQt-N8iey609ERNT9k8F556igvwitEBQOvWO6LTgITn_f7IXhIPBLpzZQilSMcTKVxLIfOeP9AiefwMGmLbFPNAhnXLGF8dbd8ynTaFh0CBJfvtt8SuYc2iCmkbN-K7JGZdXOgwYaoTvLxP88KgT1xOZXuDTX7l9O9");'></div>
+<div class="flex-1">
+<p class="font-bold text-gray-800 dark:text-white">Illegal parking</p>
+<p class="text-sm text-gray-500 dark:text-gray-400 mt-1"><span class="font-medium text-green-500">Status: Solved</span></p>
+<p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Reported on 2023-09-05</p>
+</div>
+<button class="p-2 text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<footer class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm border-t border-zinc-200 dark:border-zinc-800">
+<nav class="flex justify-around items-center h-16">
+<a class="flex flex-col items-center justify-center w-1/4 h-full text-zinc-500 dark:text-zinc-400 hover:text-primary" href="./index.html">
+<span class="material-symbols-outlined">home</span>
+<span class="text-xs font-bold">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center w-1/4 h-full text-primary" href="./report.html">
+<span class="material-symbols-outlined">description</span>
+<span class="text-xs font-medium">Report</span>
+</a>
+<a class="flex flex-col items-center justify-center w-1/4 h-full text-zinc-500 dark:text-zinc-400 hover:text-primary" href="./post.html">
+<span class="material-symbols-outlined">photo_camera</span>
+<span class="text-xs font-medium">Camera</span>
+</a>
+<a class="flex flex-col items-center justify-center w-1/4 h-full text-zinc-500 dark:text-zinc-400 hover:text-primary" href="./profile.html">
+<span class="material-symbols-outlined">person</span>
+<span class="text-xs font-medium">Profile</span>
+</a>
+</nav>
+</footer>
+</div>
+
+</body></html>
