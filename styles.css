@@ -390,7 +390,44 @@ body {
   background-color: #dc2626;
 }
 
-/* Dark mode colors */
+/* Dark mode colors - applies when dark background is used */
+.bg-background-dark .text-zinc-900 {
+  color: white;
+}
+
+.bg-background-dark .text-zinc-500 {
+  color: #a1a1aa;
+}
+
+.bg-background-dark .text-zinc-400 {
+  color: #a1a1aa;
+}
+
+.bg-background-dark .text-gray-800 {
+  color: white;
+}
+
+.bg-background-dark .text-gray-900 {
+  color: white;
+}
+
+.bg-background-dark .text-gray-500 {
+  color: #9ca3af;
+}
+
+.bg-background-dark .text-gray-400 {
+  color: #9ca3af;
+}
+
+.bg-background-dark .bg-white {
+  background-color: rgba(16, 28, 34, 0.5);
+}
+
+.bg-background-dark .bg-gray-200 {
+  background-color: rgba(16, 28, 34, 0.5);
+}
+
+/* Dark mode colors for system preference */
 @media (prefers-color-scheme: dark) {
   .text-zinc-900 {
     color: white;
