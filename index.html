@@ -159,6 +159,18 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Get user location first
     await getCurrentLocationAndUpdateHeader();
     
+    // Wait for Firebase to initialize
+    await new Promise(resolve => {
+      const checkReady = () => {
+        if (window.reportManager) {
+          resolve();
+        } else {
+          setTimeout(checkReady, 100);
+        }
+      };
+      checkReady();
+    });
+    
     // Get reports from Firebase
     const allReports = await window.reportManager.getAllReports();
     

@@ -330,7 +330,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   getLocationBtn.addEventListener('click', getCurrentLocation);
   initializeImageUpload();
   
-  submitBtn.addEventListener('click', function(e) {
+  submitBtn.addEventListener('click', async function(e) {
     e.preventDefault();
     
     if (!validateForm()) {
@@ -390,7 +390,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         imageUrl: imageUrl
       };
       
-      // Save to Firebase instead of local storage
+      // Save to Firebase
       await window.reportManager.addReport(reportData);
       alert('Report submitted successfully!');
       

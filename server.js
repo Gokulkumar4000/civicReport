@@ -20,7 +20,7 @@ app.use((req, res, next) => {
   // Check if it's the firebase-config.js file
   if (req.url === '/firebase-config.js' && fs.existsSync(filePath)) {
     // Check if all required Firebase environment variables are present
-    const requiredVars = ['FIREBASE_API_KEY', 'FIREBASE_AUTH_DOMAIN', 'FIREBASE_PROJECT_ID', 'FIREBASE_STORAGE_BUCKET', 'FIREBASE_MESSAGING_SENDER_ID', 'FIREBASE_APP_ID'];
+    const requiredVars = ['VITE_FIREBASE_API_KEY', 'VITE_FIREBASE_PROJECT_ID', 'VITE_FIREBASE_APP_ID'];
     const missingVars = requiredVars.filter(varName => !process.env[varName]);
     
     if (missingVars.length > 0) {
@@ -32,12 +32,12 @@ app.use((req, res, next) => {
     let content = fs.readFileSync(filePath, 'utf8');
     
     // Replace placeholders with environment variables
-    content = content.replace(/\{\{FIREBASE_API_KEY\}\}/g, process.env.FIREBASE_API_KEY);
-    content = content.replace(/\{\{FIREBASE_AUTH_DOMAIN\}\}/g, process.env.FIREBASE_AUTH_DOMAIN);
-    content = content.replace(/\{\{FIREBASE_PROJECT_ID\}\}/g, process.env.FIREBASE_PROJECT_ID);
-    content = content.replace(/\{\{FIREBASE_STORAGE_BUCKET\}\}/g, process.env.FIREBASE_STORAGE_BUCKET);
-    content = content.replace(/\{\{FIREBASE_MESSAGING_SENDER_ID\}\}/g, process.env.FIREBASE_MESSAGING_SENDER_ID);
-    content = content.replace(/\{\{FIREBASE_APP_ID\}\}/g, process.env.FIREBASE_APP_ID);
+    content = content.replace(/\{\{FIREBASE_API_KEY\}\}/g, process.env.VITE_FIREBASE_API_KEY);
+    content = content.replace(/\{\{FIREBASE_AUTH_DOMAIN\}\}/g, `${process.env.VITE_FIREBASE_PROJECT_ID}.firebaseapp.com`);
+    content = content.replace(/\{\{FIREBASE_PROJECT_ID\}\}/g, process.env.VITE_FIREBASE_PROJECT_ID);
+    content = content.replace(/\{\{FIREBASE_STORAGE_BUCKET\}\}/g, `${process.env.VITE_FIREBASE_PROJECT_ID}.firebasestorage.app`);
+    content = content.replace(/\{\{FIREBASE_MESSAGING_SENDER_ID\}\}/g, process.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '');
+    content = content.replace(/\{\{FIREBASE_APP_ID\}\}/g, process.env.VITE_FIREBASE_APP_ID);
     
     res.setHeader('Content-Type', 'application/javascript');
     res.send(content);
