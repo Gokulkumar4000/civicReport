@@ -23,12 +23,17 @@
 <div class="w-10"></div>
 </header>
 <main class="p-4">
-<section class="mb-8 flex flex-col items-center gap-4">
-<div class="h-32 w-32 rounded-full bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA7bWPSjarPI3FB4VGma7TBRV0CmPhPYkJViKaGEAy6ik8biv5IWfi_Hj7tQvDNGnhXS6s3JX-NlpG4EUFmwrRPOaK931I-NA3BOU6fIyOkOAOfVT9caBNGCubQkFPePFobJOjJw2_RSGbcyTO9KgpEsNBrfM70Pou6Va281zpG2QSAFUcoH7b6vFEg9m27hNYFH-dMFdRQbfhRPCusCt2l2kpaGCBLam9owDV_vozZiUy5FqDA8-vZDlYmIA-I1o4V62wmCeMo8OFJ");'></div>
+<div id="loading-profile" class="text-center py-8">
+<p class="text-zinc-500">Loading profile...</p>
+</div>
+<section id="profile-section" class="mb-8 flex flex-col items-center gap-4 hidden">
+<div id="profile-avatar" class="h-32 w-32 rounded-full bg-gray-300 flex items-center justify-center">
+<span class="material-symbols-outlined text-gray-500 text-4xl">person</span>
+</div>
 <div class="text-center">
-<h2 class="text-2xl font-bold text-zinc-900">Dravid</h2>
-<p class="text-zinc-500">View profile</p>
-<p class="text-sm text-zinc-500">Joined 2021</p>
+<h2 id="profile-name" class="text-2xl font-bold text-zinc-900">Loading...</h2>
+<p class="text-zinc-500">Your profile</p>
+<p id="profile-joined" class="text-sm text-zinc-500">Joined recently</p>
 </div>
 </section>
 <section class="space-y-6">
@@ -36,10 +41,10 @@
 <div class="flex items-center justify-between">
 <div>
 <h3 class="font-medium text-zinc-900">Profile visibility</h3>
-<p class="text-sm text-zinc-500">Visible to everyone</p>
+<p id="visibility-description" class="text-sm text-zinc-500">Visible to everyone</p>
 </div>
 <label class="toggle-switch">
-<input checked class="toggle-input" type="checkbox"/>
+<input id="profile-visibility-toggle" class="toggle-input" type="checkbox"/>
 <div class="toggle-bg"></div>
 <div class="toggle-thumb"></div>
 </label>
@@ -47,46 +52,24 @@
 </div>
 <div class="rounded-lg bg-white p-4">
 <h3 class="mb-4 text-lg font-bold text-zinc-900">Personal details</h3>
-<div class="space-y-4">
-<div class="flex items-center justify-between">
-<div>
-<p class="font-medium text-zinc-900">Phone</p>
-<p class="text-sm text-zinc-500">+91 9876543210</p>
-</div>
-<button class="flex size-8 items-center justify-center rounded-full text-zinc-500 hover-primary">
-<svg fill="currentColor" height="20" viewBox="0 0 256 256" width="20" xmlns="http://www.w3.org/2000/svg">
-<path d="M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.68,147.31,64l24-24L216,84.68Z"></path>
-</svg>
-</button>
-</div>
-<div class="flex items-center justify-between">
-<div>
-<p class="font-medium text-zinc-900">Email</p>
-<p class="text-sm text-zinc-500">ethan.carter@email.com</p>
-</div>
-<button class="flex size-8 items-center justify-center rounded-full text-zinc-500 hover-primary">
-<svg fill="currentColor" height="20" viewBox="0 0 256 256" width="20" xmlns="http://www.w3.org/2000/svg">
-<path d="M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.68,147.31,64l24-24L216,84.68Z"></path>
-</svg>
-</button>
-</div>
-<div class="flex items-center justify-between">
-<div>
-<p class="font-medium text-zinc-900">Aadhar</p>
-<p class="text-sm text-zinc-500">XXXX XXX 123</p>
-</div>
-</div>
+<div id="personal-details" class="space-y-4">
+<!-- Details will be loaded here -->
 </div>
 </div>
 <div class="rounded-lg bg-white p-4">
-<h3 class="mb-4 text-lg font-bold text-zinc-900">Saved posts</h3>
-<div class="flex items-center gap-4">
-<div class="flex-1 space-y-1">
-<p class="text-sm text-zinc-500">Saved</p>
-<p class="font-bold text-zinc-900">Incident reported</p>
-<p class="text-sm text-zinc-500">Status: In progress</p>
+<h3 class="mb-4 text-lg font-bold text-zinc-900">My Reports</h3>
+<div id="user-reports-summary">
+<!-- Reports summary will be loaded here -->
 </div>
-<div class="h-20 w-28 flex-shrink-0 rounded-lg bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBf8ZEBy8m37PMFnwLEuGXstBW_QVmOFAgnlJGVHrsfX7ukboezgaBCI-mcSlR-e4IucIbuwJBA7YjqtB3wTbkZ9GgObFEVYg5UoDRhp8bc6YQCsP55HIVdpm9zKZVvwXWEOC4tvMF8-oDAxZtTfkHkylh5-kmxM2a_3csDYhNFMWavkVLffLqiMab2zGsG_ia2xWdXGSH93l50GQcOrFajwI8zaQ6aPY2Hr_qA59jp_hyd_5mGe-THJybzldYAingZKInqhsgsboZ3");'></div>
+</div>
+
+<div class="rounded-lg bg-white p-4 mt-4">
+<h3 class="mb-4 text-lg font-bold text-zinc-900">Account Actions</h3>
+<div class="space-y-3">
+<button id="logout-btn" class="w-full flex items-center justify-center gap-2 p-3 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-medium">Sign Out</span>
+</button>
 </div>
 </div>
 </section>
@@ -113,5 +96,162 @@
 </nav>
 </footer>
 </div>
+
+<script type="module">
+document.addEventListener('DOMContentLoaded', async function() {
+  const loadingProfile = document.getElementById('loading-profile');
+  const profileSection = document.getElementById('profile-section');
+  const profileAvatar = document.getElementById('profile-avatar');
+  const profileName = document.getElementById('profile-name');
+  const profileJoined = document.getElementById('profile-joined');
+  const personalDetails = document.getElementById('personal-details');
+  const userReportsSummary = document.getElementById('user-reports-summary');
+  const profileVisibilityToggle = document.getElementById('profile-visibility-toggle');
+  const visibilityDescription = document.getElementById('visibility-description');
+  const logoutBtn = document.getElementById('logout-btn');
+  
+  // Wait for Firebase to initialize and check authentication
+  await new Promise(resolve => {
+    const checkReady = () => {
+      if (window.authManager && window.reportManager) {
+        resolve();
+      } else {
+        setTimeout(checkReady, 100);
+      }
+    };
+    checkReady();
+  });
+  
+  // Check authentication
+  setTimeout(async () => {
+    if (!window.authManager.isAuthenticated()) {
+      alert('Please login to view your profile');
+      window.location.href = './login.html';
+      return;
+    }
+    
+    await loadProfile();
+  }, 1000); // Give time for auth state to load
+  
+  async function loadProfile() {
+    try {
+      // Get current user data
+      const userData = await window.authManager.getCurrentUserData();
+      if (!userData) {
+        throw new Error('Could not load user data');
+      }
+      
+      // Update profile display
+      profileName.textContent = userData.name || 'Unknown User';
+      
+      if (userData.createdAt) {
+        const joinDate = new Date(userData.createdAt.toDate()).getFullYear();
+        profileJoined.textContent = `Joined ${joinDate}`;
+      }
+      
+      // Update avatar
+      if (userData.profilePicture) {
+        profileAvatar.innerHTML = `<img src="${userData.profilePicture}" alt="Profile" class="h-32 w-32 rounded-full object-cover">`;
+      } else {
+        const initial = userData.name ? userData.name.charAt(0).toUpperCase() : '?';
+        profileAvatar.innerHTML = `<div class="h-32 w-32 rounded-full bg-primary flex items-center justify-center text-white text-4xl font-bold">${initial}</div>`;
+      }
+      
+      // Update profile visibility toggle
+      profileVisibilityToggle.checked = userData.profileVisible;
+      visibilityDescription.textContent = userData.profileVisible ? 'Visible to everyone' : 'Anonymous to others';
+      
+      // Update personal details
+      personalDetails.innerHTML = `
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="font-medium text-zinc-900">Name</p>
+            <p class="text-sm text-zinc-500">${userData.name || 'Not provided'}</p>
+          </div>
+        </div>
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="font-medium text-zinc-900">Email</p>
+            <p class="text-sm text-zinc-500">${userData.email || 'Not provided'}</p>
+          </div>
+        </div>
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="font-medium text-zinc-900">Phone</p>
+            <p class="text-sm text-zinc-500">${userData.phone || 'Not provided'}</p>
+          </div>
+        </div>
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="font-medium text-zinc-900">Aadhar Card</p>
+            <p class="text-sm text-zinc-500">**** **** ${userData.aadharCard ? userData.aadharCard.slice(-4) : '****'}</p>
+          </div>
+        </div>
+      `;
+      
+      // Load reports summary
+      const userReports = await window.reportManager.getCurrentUserReports();
+      const totalReports = userReports.length;
+      const solvedReports = userReports.filter(r => r.status === 'Solved').length;
+      const pendingReports = userReports.filter(r => r.status === 'Pending').length;
+      
+      userReportsSummary.innerHTML = `
+        <div class="grid grid-cols-3 gap-4">
+          <div class="text-center">
+            <p class="text-2xl font-bold text-zinc-900">${totalReports}</p>
+            <p class="text-sm text-zinc-500">Total Reports</p>
+          </div>
+          <div class="text-center">
+            <p class="text-2xl font-bold text-green-600">${solvedReports}</p>
+            <p class="text-sm text-zinc-500">Solved</p>
+          </div>
+          <div class="text-center">
+            <p class="text-2xl font-bold text-yellow-600">${pendingReports}</p>
+            <p class="text-sm text-zinc-500">Pending</p>
+          </div>
+        </div>
+        <div class="mt-4 text-center">
+          <a href="./report.html" class="text-primary font-semibold hover:underline">View All Reports →</a>
+        </div>
+      `;
+      
+      // Show profile section and hide loading
+      loadingProfile.classList.add('hidden');
+      profileSection.classList.remove('hidden');
+      
+    } catch (error) {
+      console.error('Error loading profile:', error);
+      loadingProfile.innerHTML = '<p class="text-red-500">Error loading profile. Please try again.</p>';
+    }
+  }
+  
+  // Profile visibility toggle
+  profileVisibilityToggle.addEventListener('change', async function() {
+    try {
+      const isVisible = this.checked;
+      await window.authManager.updateProfile({ profileVisible: isVisible });
+      visibilityDescription.textContent = isVisible ? 'Visible to everyone' : 'Anonymous to others';
+    } catch (error) {
+      console.error('Error updating visibility:', error);
+      alert('Error updating profile visibility. Please try again.');
+      // Revert toggle
+      this.checked = !this.checked;
+    }
+  });
+  
+  // Logout functionality
+  logoutBtn.addEventListener('click', async function() {
+    if (confirm('Are you sure you want to sign out?')) {
+      try {
+        await window.authManager.logout();
+        window.location.href = './login.html';
+      } catch (error) {
+        console.error('Logout error:', error);
+        alert('Error signing out. Please try again.');
+      }
+    }
+  });
+});
+</script>
 </body>
 </html>

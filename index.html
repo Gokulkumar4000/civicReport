@@ -18,9 +18,14 @@
 <span class="material-symbols-outlined text-zinc-900">location_on</span>
 <h1 class="text-xl font-bold text-zinc-900">San Francisco</h1>
 </div>
+<div class="flex items-center gap-2">
 <button class="p-2 rounded-full hover-primary">
 <span class="material-symbols-outlined text-zinc-900">notifications</span>
 </button>
+<button id="logout-btn" class="p-2 rounded-full hover-primary" title="Logout">
+<span class="material-symbols-outlined text-zinc-900">logout</span>
+</button>
+</div>
 </div>
 <div class="px-4 pb-4">
 <div class="flex items-center gap-4">
@@ -64,25 +69,32 @@
 </div>
 
 <script type="module">
-// Load and display reports from Firebase
 document.addEventListener('DOMContentLoaded', async function() {
   const reportsContainer = document.getElementById('reports-container');
   const loadingState = document.getElementById('loading-state');
   
+  // Wait for Firebase to initialize
+  await new Promise(resolve => {
+    const checkReady = () => {
+      if (window.authManager && window.reportManager) {
+        resolve();
+      } else {
+        setTimeout(checkReady, 100);
+      }
+    };
+    checkReady();
+  });
+  
+  // Check authentication
+  setTimeout(() => {
+    if (!window.authManager.isAuthenticated()) {
+      window.location.href = './login.html';
+      return;
+    }
+  }, 1000); // Give time for auth state to load
+  
   try {
-    // Wait for Firebase to initialize
-    await new Promise(resolve => {
-      const checkReady = () => {
-        if (window.reportManager) {
-          resolve();
-        } else {
-          setTimeout(checkReady, 100);
-        }
-      };
-      checkReady();
-    });
-
-    // Get reports from Firebase
+    // Get reports from Firebase (sorted by immediate help first, then engagement)
     const reports = await window.reportManager.getAllReports();
     
     // Clear loading state
@@ -104,34 +116,59 @@ document.addEventListener('DOMContentLoaded', async function() {
       
       const createdDate = report.createdAt ? new Date(report.createdAt.toDate()).toLocaleDateString() : 'Unknown date';
       
+      // User display logic
+      let userDisplay = 'Anonymous';
+      let userAvatar = 'https://via.placeholder.com/56x56/9ca3af/ffffff?text=?';
+      
+      if (report.user && report.user.profileVisible) {
+        userDisplay = report.user.name;
+        userAvatar = report.user.profilePicture || `https://via.placeholder.com/56x56/1193d4/ffffff?text=${report.user.name.charAt(0)}`;
+      }
+      
+      const immediateHelpBadge = report.immediateHelp ? 
+        '<span class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-red-100 text-red-800 mb-2"><span class="material-symbols-outlined text-xs mr-1">priority_high</span>Immediate Help</span>' : '';
+      
       article.innerHTML = `
         <div class="p-4">
-          <div class="relative">
+          <!-- User info header -->
+          <div class="flex items-center gap-3 mb-3">
+            <img src="${userAvatar}" alt="${userDisplay}" class="w-14 h-14 rounded-full">
+            <div class="flex-1">
+              <p class="font-semibold text-zinc-900">${userDisplay}</p>
+              <p class="text-sm text-zinc-500">${createdDate} • ${report.location || 'Location not specified'}</p>
+            </div>
+            <button class="p-2 text-zinc-500 hover-primary rounded-full">
+              <span class="material-symbols-outlined">more_horiz</span>
+            </button>
+          </div>
+          
+          ${immediateHelpBadge}
+          
+          <div class="relative mb-3">
             ${report.imageUrl ? 
               `<img alt="Report image" class="w-full h-auto rounded-lg" src="${report.imageUrl}"/>` :
               `<div class="w-full h-40 bg-gray-300 rounded-lg flex items-center justify-center">
                 <span class="material-symbols-outlined text-gray-500 text-4xl">image</span>
               </div>`
             }
-            <button class="absolute top-2 right-2 px-4 py-2 text-sm font-semibold text-zinc-900 bg-white rounded-full backdrop-blur-sm">Report</button>
           </div>
-          <div class="pt-4">
-            <h3 class="text-lg font-bold text-zinc-900">${report.title || 'Untitled Report'}</h3>
-            <p class="mt-1 text-zinc-600">${report.description || 'No description provided'} <button class="text-primary font-semibold">read more</button></p>
-            <p class="text-sm text-zinc-500 mt-1">${report.location || 'Location not specified'}</p>
-            <p class="text-xs ${statusColor} mt-1">Status: ${report.status || 'Reported'} • ${createdDate}</p>
+          
+          <div>
+            <h3 class="text-lg font-bold text-zinc-900 mb-2">${report.title || 'Untitled Report'}</h3>
+            <p class="text-zinc-600 mb-2">${report.description || 'No description provided'}</p>
+            <p class="text-xs ${statusColor}">Status: ${report.status || 'Reported'}</p>
           </div>
         </div>
-        <div class="flex justify-around py-2">
-          <button class="flex items-center gap-2 px-3 py-2 text-zinc-600 hover-primary rounded-full">
+        <div class="flex justify-around py-3 border-t border-zinc-200">
+          <button class="engagement-btn flex items-center gap-2 px-4 py-2 text-zinc-600 hover-primary rounded-full transition-colors" data-type="likes" data-id="${report.id}">
             <span class="material-symbols-outlined">thumb_up</span>
             <span class="text-sm font-semibold">${report.likes || 0}</span>
           </button>
-          <button class="flex items-center gap-2 px-3 py-2 text-zinc-600 hover-primary rounded-full">
+          <button class="engagement-btn flex items-center gap-2 px-4 py-2 text-zinc-600 hover-primary rounded-full transition-colors" data-type="bookmarks" data-id="${report.id}">
             <span class="material-symbols-outlined">bookmark</span>
             <span class="text-sm font-semibold">${report.bookmarks || 0}</span>
           </button>
-          <button class="flex items-center gap-2 px-3 py-2 text-zinc-600 hover-primary rounded-full">
+          <button class="engagement-btn flex items-center gap-2 px-4 py-2 text-zinc-600 hover-primary rounded-full transition-colors" data-type="shares" data-id="${report.id}">
             <span class="material-symbols-outlined">share</span>
             <span class="text-sm font-semibold">${report.shares || 0}</span>
           </button>
@@ -141,9 +178,46 @@ document.addEventListener('DOMContentLoaded', async function() {
       reportsContainer.appendChild(article);
     });
     
+    // Add engagement button functionality
+    document.querySelectorAll('.engagement-btn').forEach(btn => {
+      btn.addEventListener('click', async function() {
+        const type = this.getAttribute('data-type');
+        const reportId = this.getAttribute('data-id');
+        const countSpan = this.querySelector('.text-sm');
+        
+        try {
+          // Update in Firebase
+          await window.reportManager.updateEngagement(reportId, type);
+          
+          // Update UI
+          const currentCount = parseInt(countSpan.textContent);
+          countSpan.textContent = currentCount + 1;
+          
+          // Add visual feedback
+          this.classList.add('text-primary');
+          setTimeout(() => this.classList.remove('text-primary'), 300);
+          
+        } catch (error) {
+          console.error('Error updating engagement:', error);
+        }
+      });
+    });
+    
   } catch (error) {
     console.error('Error loading reports:', error);
     loadingState.innerHTML = '<p class="text-red-500">Error loading reports. Please try again later.</p>';
+  }
+});
+
+// Logout functionality
+document.getElementById('logout-btn').addEventListener('click', async function() {
+  if (confirm('Are you sure you want to logout?')) {
+    try {
+      await window.authManager.logout();
+      window.location.href = './login.html';
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   }
 });
 </script>

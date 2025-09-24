@@ -77,25 +77,35 @@ document.addEventListener('DOMContentLoaded', async function() {
   
   let allReports = [];
   
-  // Load reports from Firebase
+  // Wait for Firebase to initialize and check authentication
+  await new Promise(resolve => {
+    const checkReady = () => {
+      if (window.authManager && window.reportManager) {
+        resolve();
+      } else {
+        setTimeout(checkReady, 100);
+      }
+    };
+    checkReady();
+  });
+  
+  // Check authentication
+  setTimeout(() => {
+    if (!window.authManager.isAuthenticated()) {
+      alert('Please login to view your reports');
+      window.location.href = './login.html';
+      return;
+    }
+  }, 1000); // Give time for auth state to load
+  
+  // Load current user's reports from Firebase
   async function loadReports() {
     try {
-      // Wait for Firebase to initialize
-      await new Promise(resolve => {
-        const checkReady = () => {
-          if (window.reportManager) {
-            resolve();
-          } else {
-            setTimeout(checkReady, 100);
-          }
-        };
-        checkReady();
-      });
-      
-      allReports = await window.reportManager.getAllReports();
+      // Get current user's reports only
+      allReports = await window.reportManager.getCurrentUserReports();
       loadingReports.style.display = 'none';
       
-      // Update total cases count
+      // Update total cases count (solved cases by current user)
       const totalCases = document.querySelector('.text-4xl.font-bold');
       if (totalCases) {
         const solvedCount = allReports.filter(report => report.status === 'Solved').length;
@@ -106,7 +116,12 @@ document.addEventListener('DOMContentLoaded', async function() {
       
     } catch (error) {
       console.error('Error loading reports:', error);
-      loadingReports.innerHTML = '<p class="text-red-500">Error loading reports.</p>';
+      if (error.message.includes('logged in')) {
+        alert('Please login to view your reports');
+        window.location.href = './login.html';
+      } else {
+        loadingReports.innerHTML = '<p class="text-red-500">Error loading reports.</p>';
+      }
     }
   }
   
@@ -120,7 +135,12 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
     
     if (filteredReports.length === 0) {
-      reportsList.innerHTML = '<div class="text-center py-4"><p class="text-zinc-500">No reports found for this filter.</p></div>';
+      const filterText = currentFilter === 'All' ? '' : ` with status "${currentFilter}"`;
+      reportsList.innerHTML = `<div class="text-center py-8">
+        <span class="material-symbols-outlined text-zinc-400 text-4xl">description</span>
+        <p class="text-zinc-500 mt-2">No reports found${filterText}.</p>
+        <a href="./post.html" class="text-primary font-semibold mt-2 inline-block">Create your first report</a>
+      </div>`;
       return;
     }
     
@@ -136,6 +156,9 @@ document.addEventListener('DOMContentLoaded', async function() {
       
       const createdDate = report.createdAt ? new Date(report.createdAt.toDate()).toLocaleDateString() : 'Unknown date';
       
+      const immediateHelpBadge = report.immediateHelp ? 
+        '<span class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-red-100 text-red-800 ml-2"><span class="material-symbols-outlined text-xs mr-1">priority_high</span>Urgent</span>' : '';
+      
       reportItem.innerHTML = `
         ${report.imageUrl ? 
           `<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-16" style="background-image: url('${report.imageUrl}');"></div>` :
@@ -144,16 +167,47 @@ document.addEventListener('DOMContentLoaded', async function() {
           </div>`
         }
         <div class="flex-1">
-          <p class="font-bold text-gray-800">${report.title || 'Untitled Report'}</p>
-          <p class="text-sm text-gray-500 mt-1"><span class="font-medium ${statusColor}">Status: ${report.status || 'Reported'}</span></p>
+          <div class="flex items-center">
+            <p class="font-bold text-gray-800">${report.title || 'Untitled Report'}</p>
+            ${immediateHelpBadge}
+          </div>
+          <p class="text-sm text-gray-500 mt-1">
+            <span class="font-medium ${statusColor}">Status: ${report.status || 'Reported'}</span>
+            <span class="mx-1">•</span>
+            <span>${report.likes || 0} likes, ${report.bookmarks || 0} saved, ${report.shares || 0} shares</span>
+          </p>
           <p class="text-xs text-gray-400 mt-1">Reported on ${createdDate}</p>
         </div>
-        <button class="p-2 text-gray-500 hover-red delete-btn" data-report-id="${report.id}">
-          <span class="material-symbols-outlined">delete</span>
-        </button>
+        <div class="flex flex-col gap-2">
+          <select class="status-select text-sm border border-gray-300 rounded px-2 py-1" data-report-id="${report.id}">
+            <option value="Reported" ${report.status === 'Reported' ? 'selected' : ''}>Reported</option>
+            <option value="Pending" ${report.status === 'Pending' ? 'selected' : ''}>Pending</option>
+            <option value="Solved" ${report.status === 'Solved' ? 'selected' : ''}>Solved</option>
+          </select>
+          <button class="p-2 text-gray-500 hover-red delete-btn" data-report-id="${report.id}" title="Delete Report">
+            <span class="material-symbols-outlined">delete</span>
+          </button>
+        </div>
       `;
       
       reportsList.appendChild(reportItem);
+    });
+    
+    // Add status change functionality
+    document.querySelectorAll('.status-select').forEach(select => {
+      select.addEventListener('change', async function() {
+        const reportId = this.getAttribute('data-report-id');
+        const newStatus = this.value;
+        
+        try {
+          await window.reportManager.updateReportStatus(reportId, newStatus);
+          // Reload reports to update counts and display
+          await loadReports();
+        } catch (error) {
+          console.error('Error updating status:', error);
+          alert('Error updating report status. Please try again.');
+        }
+      });
     });
     
     // Add delete functionality
@@ -161,13 +215,17 @@ document.addEventListener('DOMContentLoaded', async function() {
       btn.addEventListener('click', async function() {
         const reportId = this.getAttribute('data-report-id');
         
-        if (confirm('Are you sure you want to delete this report?')) {
+        if (confirm('Are you sure you want to delete this report? This action cannot be undone.')) {
           try {
             await window.reportManager.deleteReport(reportId);
             await loadReports(); // Reload reports
           } catch (error) {
             console.error('Error deleting report:', error);
-            alert('Error deleting report. Please try again.');
+            if (error.message.includes('only delete your own')) {
+              alert('You can only delete your own reports.');
+            } else {
+              alert('Error deleting report. Please try again.');
+            }
           }
         }
       });

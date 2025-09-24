@@ -55,9 +55,12 @@ Add Tag
 </div>
 <div>
 <div class="flex items-center justify-between bg-white p-3 rounded-lg">
+<div>
 <h3 class="text-lg font-bold text-zinc-900">Immediate help</h3>
+<p class="text-sm text-zinc-500">Mark if this incident requires urgent attention</p>
+</div>
 <label class="toggle-switch">
-<input class="toggle-input" type="checkbox" value=""/>
+<input id="immediate-help-toggle" class="toggle-input" type="checkbox" value=""/>
 <div class="toggle-bg"></div>
 <div class="toggle-thumb"></div>
 </label>
@@ -91,11 +94,34 @@ Add Tag
 document.addEventListener('DOMContentLoaded', function() {
   const submitBtn = document.getElementById('submit-btn');
   const descriptionInput = document.getElementById('description-input');
+  const immediateHelpToggle = document.getElementById('immediate-help-toggle');
+  
+  // Wait for Firebase to initialize and check authentication
+  setTimeout(async () => {
+    await new Promise(resolve => {
+      const checkReady = () => {
+        if (window.authManager && window.reportManager) {
+          resolve();
+        } else {
+          setTimeout(checkReady, 100);
+        }
+      };
+      checkReady();
+    });
+    
+    // Check authentication
+    if (!window.authManager.isAuthenticated()) {
+      alert('Please login to create reports');
+      window.location.href = './login.html';
+      return;
+    }
+  }, 1000);
   
   submitBtn.addEventListener('click', async function(e) {
     e.preventDefault();
     
     const description = descriptionInput.value.trim();
+    const immediateHelp = immediateHelpToggle.checked;
     
     if (!description) {
       alert('Please provide a description for the incident.');
@@ -107,18 +133,6 @@ document.addEventListener('DOMContentLoaded', function() {
     submitBtn.textContent = 'Submitting...';
     
     try {
-      // Wait for Firebase to initialize
-      await new Promise(resolve => {
-        const checkReady = () => {
-          if (window.reportManager) {
-            resolve();
-          } else {
-            setTimeout(checkReady, 100);
-          }
-        };
-        checkReady();
-      });
-      
       // Extract title from description (first sentence or first 50 chars)
       const title = description.split('.')[0].substring(0, 50) + (description.length > 50 ? '...' : '');
       
@@ -135,6 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
         likes: 0,
         bookmarks: 0,
         shares: 0,
+        immediateHelp: immediateHelp,
         imageUrl: null // You can add image upload functionality later
       };
       
@@ -146,13 +161,19 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Reset form
       descriptionInput.value = '';
+      immediateHelpToggle.checked = false;
       
       // Redirect to home page
       window.location.href = './index.html';
       
     } catch (error) {
       console.error('Error submitting report:', error);
-      alert('Error submitting report. Please try again.');
+      if (error.message.includes('logged in')) {
+        alert('Please login to create reports');
+        window.location.href = './login.html';
+      } else {
+        alert('Error submitting report. Please try again.');
+      }
     } finally {
       submitBtn.disabled = false;
       submitBtn.textContent = 'Submit Post';
