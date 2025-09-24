@@ -70,24 +70,100 @@
 
 <script type="module">
 document.addEventListener('DOMContentLoaded', async function() {
+  // Wait for Firebase to initialize
+  await new Promise(resolve => {
+    const checkReady = () => {
+      if (window.authManager && window.reportManager) {
+        resolve();
+      } else {
+        setTimeout(checkReady, 100);
+      }
+    };
+    checkReady();
+  });
   const reportsContainer = document.getElementById('reports-container');
   const loadingState = document.getElementById('loading-state');
+  let userLocation = null;
   
-  // Load reports from local storage (no Firebase authentication needed)
+  // Get user's current location and update header
+  async function getCurrentLocationAndUpdateHeader() {
+    return new Promise((resolve) => {
+      if (!navigator.geolocation) {
+        resolve(null);
+        return;
+      }
+      
+      navigator.geolocation.getCurrentPosition(
+        async function(position) {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          userLocation = { lat, lng };
+          
+          try {
+            // Get city name from coordinates
+            const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`);
+            const data = await response.json();
+            
+            const city = data.city || data.locality || 'Unknown City';
+            const region = data.principalSubdivision || data.region || '';
+            
+            // Update header location
+            const headerLocation = document.querySelector('.flex.items-center.gap-2 h1');
+            if (headerLocation) {
+              headerLocation.textContent = city + (region ? `, ${region}` : '');
+            }
+            
+            resolve({ city, region, lat, lng });
+          } catch (error) {
+            console.error('Reverse geocoding failed:', error);
+            resolve({ city: 'Unknown Location', region: '', lat, lng });
+          }
+        },
+        function(error) {
+          console.error('Geolocation failed:', error);
+          resolve(null);
+        }
+      );
+    });
+  }
+  
+  // Calculate distance between two points (Haversine formula)
+  function calculateDistance(lat1, lng1, lat2, lng2) {
+    const R = 6371; // Earth's radius in kilometers
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLng = (lng2 - lng1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLng/2) * Math.sin(dLng/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c; // Distance in kilometers
+  }
+  
+  // Filter reports by location proximity (within 50km)
+  function filterReportsByLocation(reports) {
+    if (!userLocation) return reports; // If no user location, show all reports
+    
+    return reports.filter(report => {
+      if (!report.coordinates) return true; // Include reports without coordinates
+      
+      const distance = calculateDistance(
+        userLocation.lat, userLocation.lng,
+        report.coordinates.lat, report.coordinates.lng
+      );
+      
+      return distance <= 50; // Show reports within 50km
+    });
+  }
   
   try {
-    // Ensure authentication before loading reports
-    await window.authManager.requireAuth();
+    // Get user location first
+    await getCurrentLocationAndUpdateHeader();
     
-    // Get reports from local storage
-    const reports = JSON.parse(localStorage.getItem('incident_reports') || '[]');
+    // Get reports from Firebase
+    const allReports = await window.reportManager.getAllReports();
     
-    // Sort reports by immediate help first, then by creation date
-    reports.sort((a, b) => {
-      if (a.immediateHelp && !b.immediateHelp) return -1;
-      if (!a.immediateHelp && b.immediateHelp) return 1;
-      return new Date(b.createdAt) - new Date(a.createdAt);
-    });
+    // Filter reports by location proximity
+    const reports = filterReportsByLocation(allReports);
     
     // Clear loading state
     loadingState.style.display = 'none';
@@ -180,22 +256,16 @@ document.addEventListener('DOMContentLoaded', async function() {
         const countSpan = this.querySelector('.text-sm');
         
         try {
-          // Update in local storage
-          const reports = JSON.parse(localStorage.getItem('incident_reports') || '[]');
-          const reportIndex = reports.findIndex(r => r.id === reportId);
+          // Update in Firebase
+          await window.reportManager.updateEngagement(reportId, type);
           
-          if (reportIndex !== -1) {
-            reports[reportIndex][type] = (reports[reportIndex][type] || 0) + 1;
-            localStorage.setItem('incident_reports', JSON.stringify(reports));
-            
-            // Update UI
-            const currentCount = parseInt(countSpan.textContent);
-            countSpan.textContent = currentCount + 1;
-            
-            // Add visual feedback
-            this.classList.add('text-primary');
-            setTimeout(() => this.classList.remove('text-primary'), 300);
-          }
+          // Update UI
+          const currentCount = parseInt(countSpan.textContent);
+          countSpan.textContent = currentCount + 1;
+          
+          // Add visual feedback
+          this.classList.add('text-primary');
+          setTimeout(() => this.classList.remove('text-primary'), 300);
           
         } catch (error) {
           console.error('Error updating engagement:', error);
@@ -209,14 +279,15 @@ document.addEventListener('DOMContentLoaded', async function() {
   }
 });
 
-// Logout functionality (simplified for demo)
-document.getElementById('logout-btn').addEventListener('click', function() {
+// Logout functionality
+document.getElementById('logout-btn').addEventListener('click', async function() {
   if (confirm('Are you sure you want to logout?')) {
-    // Clear any user session data if needed
-    localStorage.removeItem('user_session');
-    alert('Logged out successfully');
-    // For demo purposes, just reload the page
-    window.location.reload();
+    try {
+      await window.authManager.logout();
+      window.location.href = './login.html';
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   }
 });
 </script>
