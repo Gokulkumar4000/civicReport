@@ -5,6 +5,16 @@
   box-sizing: border-box;
 }
 
+/* Hide scrollbars */
+::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 html {
   font-family: "Public Sans", sans-serif;
   line-height: 1.5;
@@ -758,6 +768,26 @@ button {
 /* Utility classes for width fractions */
 .w-1\/4 {
   width: 25%;
+}
+
+.ml-1 {
+  margin-left: 0.25rem;
+}
+
+.-ml-2 {
+  margin-left: -0.5rem;
+}
+
+.pr-10 {
+  padding-right: 2.5rem;
+}
+
+.w-10 {
+  width: 2.5rem;
+}
+
+.flex-shrink-0 {
+  flex-shrink: 0;
 }
 
 .w-11 {

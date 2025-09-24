@@ -1,125 +1,89 @@
 <!DOCTYPE html>
-<html lang="en"><head>
+<html lang="en">
+<head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>New Post</title>
 <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;700;900&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script>
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#1193d4",
-                        "background-light": "#f6f7f8",
-                        "background-dark": "#101c22",
-                    },
-                    fontFamily: {
-                        "display": ["Public Sans"]
-                    },
-                    borderRadius: {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
-                },
-            },
-        }
-    </script>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
-  </head>
-<body class="bg-background-light dark:bg-background-dark font-display">
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body class="bg-background-light">
 <div class="flex flex-col h-screen justify-between">
 <div class="flex-grow overflow-y-auto">
-<header class="sticky top-0 bg-background-light dark:bg-background-dark z-10 px-4 py-3 flex items-center justify-between">
-<button class="text-black dark:text-white">
+<header class="header px-4 py-3 flex items-center justify-between">
+<button class="text-zinc-900">
 <span class="material-symbols-outlined">close</span>
 </button>
 <div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-black dark:text-white text-base">location_on</span>
-<span class="text-sm text-black dark:text-white">New York, NY</span>
+<span class="material-symbols-outlined text-zinc-900 text-base">location_on</span>
+<span class="text-sm text-zinc-900">New York, NY</span>
 </div>
-<button class="bg-primary text-white text-sm font-bold py-2 px-4 rounded-full">Submit Post</button>
+<button class="btn-primary">Submit Post</button>
 </header>
 <main class="p-4 space-y-6">
 <div>
-<textarea class="form-textarea w-full h-32 resize-none bg-white dark:bg-background-dark border-0 rounded-lg p-4 text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-0" placeholder="Describe the incident"></textarea>
+<textarea class="form-textarea" placeholder="Describe the incident"></textarea>
 </div>
 <div>
-<h3 class="text-lg font-bold text-black dark:text-white mb-2">Add an image</h3>
-<div class="bg-white dark:bg-background-dark rounded-lg flex items-center justify-center aspect-video border-2 border-dashed border-gray-300 dark:border-gray-600">
+<h3 class="text-lg font-bold text-zinc-900 mb-2">Add an image</h3>
+<div class="bg-white rounded-lg flex items-center justify-center aspect-video border-2 border-dashed border-gray-300">
 <div class="text-center">
-<span class="material-symbols-outlined text-4xl text-gray-400 dark:text-gray-500">add_photo_alternate</span>
-<p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Tap to add an image</p>
+<span class="material-symbols-outlined text-4xl text-gray-400">add_photo_alternate</span>
+<p class="text-sm text-gray-500 mt-1">Tap to add an image</p>
 </div>
 </div>
 </div>
 <div>
-<h3 class="text-lg font-bold text-black dark:text-white mb-2">Suggested tags</h3>
+<h3 class="text-lg font-bold text-zinc-900 mb-2">Suggested tags</h3>
 <div class="flex flex-wrap gap-2">
-<button class="flex items-center bg-primary/10 dark:bg-primary/20 text-primary py-1.5 px-3 rounded-full text-sm">
-                            Road Hazard
-                            <span class="material-symbols-outlined text-base ml-1">close</span>
+<button class="tag">
+Road Hazard
+<span class="material-symbols-outlined text-base ml-1">close</span>
 </button>
-<button class="flex items-center bg-primary/10 dark:bg-primary/20 text-primary py-1.5 px-3 rounded-full text-sm">
-                           Traffic Accident
-                            <span class="material-symbols-outlined text-base ml-1">close</span>
+<button class="tag">
+Traffic Accident
+<span class="material-symbols-outlined text-base ml-1">close</span>
 </button>
-<button class="flex items-center bg-white dark:bg-background-dark border border-gray-300 dark:border-gray-600 text-black dark:text-white py-1.5 px-3 rounded-full text-sm">
-                            Add Tag
-                            <span class="material-symbols-outlined text-base ml-1">add</span>
+<button class="tag-add">
+Add Tag
+<span class="material-symbols-outlined text-base ml-1">add</span>
 </button>
 </div>
 </div>
 <div>
-<div class="flex items-center justify-between bg-white dark:bg-background-dark p-3 rounded-lg">
-<h3 class="text-lg font-bold text-black dark:text-white">Immediate help</h3>
-<label class="relative inline-flex items-center cursor-pointer">
-<input class="sr-only peer" type="checkbox" value=""/>
-<div class="w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+<div class="flex items-center justify-between bg-white p-3 rounded-lg">
+<h3 class="text-lg font-bold text-zinc-900">Immediate help</h3>
+<label class="toggle-switch">
+<input class="toggle-input" type="checkbox" value=""/>
+<div class="toggle-bg"></div>
+<div class="toggle-thumb"></div>
 </label>
 </div>
 </div>
 </main>
 </div>
-<footer class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm border-t border-zinc-200 dark:border-zinc-800">
+<footer class="footer">
 <nav class="flex justify-around items-center h-16">
-<a class="flex flex-col items-center justify-center w-1/4 h-full text-zinc-500 dark:text-zinc-400 hover:text-primary" href="./index.html">
+<a class="nav-item" href="./index.html">
 <span class="material-symbols-outlined">home</span>
 <span class="text-xs font-bold">Home</span>
 </a>
-<a class="flex flex-col items-center justify-center w-1/4 h-full text-zinc-500 dark:text-zinc-400 hover:text-primary" href="./report.html">
+<a class="nav-item" href="./report.html">
 <span class="material-symbols-outlined">description</span>
 <span class="text-xs font-medium">Report</span>
 </a>
-<a class="flex flex-col items-center justify-center w-1/4 h-full text-primary" href="./post.html">
+<a class="nav-item active" href="./post.html">
 <span class="material-symbols-outlined">photo_camera</span>
 <span class="text-xs font-medium">Camera</span>
 </a>
-<a class="flex flex-col items-center justify-center w-1/4 h-full text-zinc-500 dark:text-zinc-400 hover:text-primary" href="./profile.html">
+<a class="nav-item" href="./profile.html">
 <span class="material-symbols-outlined">person</span>
 <span class="text-xs font-medium">Profile</span>
 </a>
 </nav>
 </footer>
 </div>
-
-</body></html>
+</body>
+</html>
