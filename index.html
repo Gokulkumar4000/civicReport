@@ -73,33 +73,21 @@ document.addEventListener('DOMContentLoaded', async function() {
   const reportsContainer = document.getElementById('reports-container');
   const loadingState = document.getElementById('loading-state');
   
-  // Wait for Firebase to initialize and authenticate
-  await new Promise(resolve => {
-    const checkReady = () => {
-      if (window.authManager && window.reportManager) {
-        resolve();
-      } else {
-        setTimeout(checkReady, 100);
-      }
-    };
-    checkReady();
-  });
-  
-  try {
-    // Wait for authentication state to be ready and require authentication
-    await window.authManager.requireAuth();
-  } catch (error) {
-    console.log('Authentication required, redirecting to login');
-    window.location.href = './login.html';
-    return;
-  }
+  // Load reports from local storage (no Firebase authentication needed)
   
   try {
     // Ensure authentication before loading reports
     await window.authManager.requireAuth();
     
-    // Get reports from Firebase (sorted by immediate help first, then engagement)
-    const reports = await window.reportManager.getAllReports();
+    // Get reports from local storage
+    const reports = JSON.parse(localStorage.getItem('incident_reports') || '[]');
+    
+    // Sort reports by immediate help first, then by creation date
+    reports.sort((a, b) => {
+      if (a.immediateHelp && !b.immediateHelp) return -1;
+      if (!a.immediateHelp && b.immediateHelp) return 1;
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
     
     // Clear loading state
     loadingState.style.display = 'none';
@@ -118,15 +106,15 @@ document.addEventListener('DOMContentLoaded', async function() {
                          report.status === 'Pending' ? 'text-yellow-500' : 
                          'text-blue-500';
       
-      const createdDate = report.createdAt ? new Date(report.createdAt.toDate()).toLocaleDateString() : 'Unknown date';
+      const createdDate = report.createdAt ? new Date(report.createdAt).toLocaleDateString() : 'Unknown date';
       
       // User display logic
-      let userDisplay = 'Anonymous';
-      let userAvatar = 'https://via.placeholder.com/56x56/9ca3af/ffffff?text=?';
+      let userDisplay = 'Anonymous User';
+      let userAvatar = 'https://via.placeholder.com/56x56/9ca3af/ffffff?text=A';
       
       if (report.user && report.user.profileVisible) {
-        userDisplay = report.user.name;
-        userAvatar = report.user.profilePicture || `https://via.placeholder.com/56x56/1193d4/ffffff?text=${report.user.name.charAt(0)}`;
+        userDisplay = report.user.name || 'Anonymous User';
+        userAvatar = report.user.profilePicture || `https://via.placeholder.com/56x56/1193d4/ffffff?text=${userDisplay.charAt(0)}`;
       }
       
       const immediateHelpBadge = report.immediateHelp ? 
@@ -160,6 +148,8 @@ document.addEventListener('DOMContentLoaded', async function() {
           <div>
             <h3 class="text-lg font-bold text-zinc-900 mb-2">${report.title || 'Untitled Report'}</h3>
             <p class="text-zinc-600 mb-2">${report.description || 'No description provided'}</p>
+            ${report.tags && report.tags.length > 0 ? 
+              `<div class="flex flex-wrap gap-1 mb-2">${report.tags.map(tag => `<span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">${tag}</span>`).join('')}</div>` : ''}
             <p class="text-xs ${statusColor}">Status: ${report.status || 'Reported'}</p>
           </div>
         </div>
@@ -190,16 +180,22 @@ document.addEventListener('DOMContentLoaded', async function() {
         const countSpan = this.querySelector('.text-sm');
         
         try {
-          // Update in Firebase
-          await window.reportManager.updateEngagement(reportId, type);
+          // Update in local storage
+          const reports = JSON.parse(localStorage.getItem('incident_reports') || '[]');
+          const reportIndex = reports.findIndex(r => r.id === reportId);
           
-          // Update UI
-          const currentCount = parseInt(countSpan.textContent);
-          countSpan.textContent = currentCount + 1;
-          
-          // Add visual feedback
-          this.classList.add('text-primary');
-          setTimeout(() => this.classList.remove('text-primary'), 300);
+          if (reportIndex !== -1) {
+            reports[reportIndex][type] = (reports[reportIndex][type] || 0) + 1;
+            localStorage.setItem('incident_reports', JSON.stringify(reports));
+            
+            // Update UI
+            const currentCount = parseInt(countSpan.textContent);
+            countSpan.textContent = currentCount + 1;
+            
+            // Add visual feedback
+            this.classList.add('text-primary');
+            setTimeout(() => this.classList.remove('text-primary'), 300);
+          }
           
         } catch (error) {
           console.error('Error updating engagement:', error);
@@ -213,15 +209,14 @@ document.addEventListener('DOMContentLoaded', async function() {
   }
 });
 
-// Logout functionality
-document.getElementById('logout-btn').addEventListener('click', async function() {
+// Logout functionality (simplified for demo)
+document.getElementById('logout-btn').addEventListener('click', function() {
   if (confirm('Are you sure you want to logout?')) {
-    try {
-      await window.authManager.logout();
-      window.location.href = './login.html';
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
+    // Clear any user session data if needed
+    localStorage.removeItem('user_session');
+    alert('Logged out successfully');
+    // For demo purposes, just reload the page
+    window.location.reload();
   }
 });
 </script>
