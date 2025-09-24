@@ -85,6 +85,34 @@ document.addEventListener('DOMContentLoaded', async function() {
   const loadingState = document.getElementById('loading-state');
   let userLocation = null;
   
+  // Load saved location on page load
+  function loadSavedLocation() {
+    try {
+      const savedLocation = localStorage.getItem('userLocation');
+      if (savedLocation) {
+        const locationData = JSON.parse(savedLocation);
+        
+        // Validate that we have valid lat/lng coordinates
+        if (locationData.lat !== undefined && locationData.lng !== undefined && 
+            typeof locationData.lat === 'number' && typeof locationData.lng === 'number') {
+          const headerLocation = document.querySelector('.flex.items-center.gap-2 h1');
+          if (headerLocation) {
+            headerLocation.textContent = locationData.fullLocation;
+          }
+          userLocation = { lat: locationData.lat, lng: locationData.lng };
+          console.log('Loaded saved location with valid coordinates:', locationData.fullLocation);
+          return true;
+        } else {
+          console.warn('Saved location missing valid coordinates, will fetch fresh location');
+          localStorage.removeItem('userLocation'); // Remove invalid data
+        }
+      }
+    } catch (error) {
+      console.log('No saved location found or invalid format');
+    }
+    return false;
+  }
+  
   // Get user's current location and update header
   async function getCurrentLocationAndUpdateHeader() {
     return new Promise((resolve) => {
@@ -112,6 +140,15 @@ document.addEventListener('DOMContentLoaded', async function() {
             if (headerLocation) {
               headerLocation.textContent = city + (region ? `, ${region}` : '');
             }
+            
+            // Save location for other pages
+            localStorage.setItem('userLocation', JSON.stringify({
+              city: city,
+              region: region,
+              fullLocation: city + (region ? `, ${region}` : ''),
+              lat: lat,
+              lng: lng
+            }));
             
             resolve({ city, region, lat, lng });
           } catch (error) {
@@ -156,8 +193,10 @@ document.addEventListener('DOMContentLoaded', async function() {
   }
   
   try {
-    // Get user location first
-    await getCurrentLocationAndUpdateHeader();
+    // Try to load saved location first, if not available get current location
+    if (!loadSavedLocation()) {
+      await getCurrentLocationAndUpdateHeader();
+    }
     
     // Wait for Firebase to initialize
     await new Promise(resolve => {

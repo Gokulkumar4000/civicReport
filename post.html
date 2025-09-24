@@ -217,8 +217,8 @@ document.addEventListener('DOMContentLoaded', async function() {
           const locationString = `${city}${region ? ', ' + region : ''}${country ? ', ' + country : ''}`;
           locationInput.value = locationString;
           
-          // Update the header location as well
-          updateHeaderLocation(city, region);
+          // Update the header location as well with coordinates
+          updateHeaderLocation(city, region, lat, lng);
           
         } catch (error) {
           console.error('Reverse geocoding failed:', error);
@@ -236,11 +236,26 @@ document.addEventListener('DOMContentLoaded', async function() {
     );
   }
   
-  // Update header location
-  function updateHeaderLocation(city, region) {
+  // Update header location and save to localStorage for other pages
+  function updateHeaderLocation(city, region, lat, lng) {
+    const locationText = city + (region ? `, ${region}` : '');
     const headerLocation = document.querySelector('.flex.items-center.gap-2 h1');
     if (headerLocation) {
-      headerLocation.textContent = city + (region ? `, ${region}` : '');
+      headerLocation.textContent = locationText;
+    }
+    
+    // Save to localStorage for other pages to use - MUST include lat/lng
+    if (lat !== undefined && lng !== undefined) {
+      localStorage.setItem('userLocation', JSON.stringify({
+        city: city,
+        region: region,
+        fullLocation: locationText,
+        lat: lat,
+        lng: lng
+      }));
+      console.log('Location updated with coordinates:', locationText, `(${lat}, ${lng})`);
+    } else {
+      console.warn('Location saved without coordinates - this may break filtering');
     }
   }
   
@@ -424,8 +439,53 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
   });
   
+  // Load saved location on page load
+  const savedLocationData = loadSavedLocation();
+  if (savedLocationData) {
+    const headerLocation = document.querySelector('.flex.items-center.gap-2 h1');
+    if (headerLocation) {
+      headerLocation.textContent = savedLocationData.fullLocation;
+    }
+  }
+  
   // Initialize the page
   initializeTags();
+  
+  function loadSavedLocation() {
+    try {
+      const savedLocation = localStorage.getItem('userLocation');
+      if (savedLocation) {
+        const locationData = JSON.parse(savedLocation);
+        if (locationData.lat !== undefined && locationData.lng !== undefined) {
+          return locationData;
+        }
+      }
+    } catch (error) {
+      console.log('No saved location found on post page');
+    }
+    return null;
+  }
+  
+  // Ensure proper visual feedback for tags
+  const style = document.createElement('style');
+  style.textContent = `
+    .tag {
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .tag:hover {
+      transform: scale(1.05);
+    }
+    .tag-selected {
+      background-color: #1193d4 !important;
+      color: white !important;
+    }
+    .tag:not(.tag-selected) {
+      background-color: #f3f4f6;
+      color: #374151;
+    }
+  `;
+  document.head.appendChild(style);
 });
 </script>
 </body>

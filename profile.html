@@ -99,7 +99,25 @@
 </div>
 
 <script type="module">
+// Load saved location on page load
+function loadSavedLocation() {
+  try {
+    const savedLocation = localStorage.getItem('userLocation');
+    if (savedLocation) {
+      const locationData = JSON.parse(savedLocation);
+      // Profile page doesn't have location header, but we keep this for consistency
+      console.log('Location loaded:', locationData.fullLocation);
+      return true;
+    }
+  } catch (error) {
+    console.log('No saved location found');
+  }
+  return false;
+}
+
 document.addEventListener('DOMContentLoaded', async function() {
+  // Load saved location
+  loadSavedLocation();
   const loadingProfile = document.getElementById('loading-profile');
   const profileSection = document.getElementById('profile-section');
   const profileAvatar = document.getElementById('profile-avatar');
