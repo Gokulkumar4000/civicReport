@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
 const PORT = 5000;
@@ -12,6 +13,30 @@ app.use((req, res, next) => {
   next();
 });
 
+// Middleware to replace Firebase config placeholders
+app.use((req, res, next) => {
+  const filePath = path.join(__dirname, req.url);
+  
+  // Check if it's the firebase-config.js file
+  if (req.url === '/firebase-config.js' && fs.existsSync(filePath)) {
+    let content = fs.readFileSync(filePath, 'utf8');
+    
+    // Replace placeholders with environment variables
+    content = content.replace(/\{\{FIREBASE_API_KEY\}\}/g, process.env.FIREBASE_API_KEY || '');
+    content = content.replace(/\{\{FIREBASE_AUTH_DOMAIN\}\}/g, process.env.FIREBASE_AUTH_DOMAIN || '');
+    content = content.replace(/\{\{FIREBASE_PROJECT_ID\}\}/g, process.env.FIREBASE_PROJECT_ID || '');
+    content = content.replace(/\{\{FIREBASE_STORAGE_BUCKET\}\}/g, process.env.FIREBASE_STORAGE_BUCKET || '');
+    content = content.replace(/\{\{FIREBASE_MESSAGING_SENDER_ID\}\}/g, process.env.FIREBASE_MESSAGING_SENDER_ID || '');
+    content = content.replace(/\{\{FIREBASE_APP_ID\}\}/g, process.env.FIREBASE_APP_ID || '');
+    
+    res.setHeader('Content-Type', 'application/javascript');
+    res.send(content);
+    return;
+  }
+  
+  next();
+});
+
 // Serve static files from current directory
 app.use(express.static('.', {
   index: 'index.html'
@@ -20,4 +45,5 @@ app.use(express.static('.', {
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running at http://0.0.0.0:${PORT}`);
   console.log('Static files are being served...');
+  console.log('Firebase configuration loaded');
 });

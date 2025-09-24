@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;700;900&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
 <link rel="stylesheet" href="./styles.css">
+<script type="module" src="./firebase-config.js"></script>
 </head>
 <body class="bg-background-dark">
 <div class="flex flex-col h-screen justify-between">
@@ -20,11 +21,11 @@
 <span class="material-symbols-outlined text-zinc-900 text-base">location_on</span>
 <span class="text-sm text-zinc-900">New York, NY</span>
 </div>
-<button class="btn-primary">Submit Post</button>
+<button id="submit-btn" class="btn-primary">Submit Post</button>
 </header>
 <main class="p-4 space-y-6">
 <div>
-<textarea class="form-textarea" placeholder="Describe the incident"></textarea>
+<textarea id="description-input" class="form-textarea" placeholder="Describe the incident"></textarea>
 </div>
 <div>
 <h3 class="text-lg font-bold text-zinc-900 mb-2">Add an image</h3>
@@ -85,5 +86,79 @@ Add Tag
 </nav>
 </footer>
 </div>
+
+<script type="module">
+document.addEventListener('DOMContentLoaded', function() {
+  const submitBtn = document.getElementById('submit-btn');
+  const descriptionInput = document.getElementById('description-input');
+  
+  submitBtn.addEventListener('click', async function(e) {
+    e.preventDefault();
+    
+    const description = descriptionInput.value.trim();
+    
+    if (!description) {
+      alert('Please provide a description for the incident.');
+      return;
+    }
+    
+    // Show loading state
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting...';
+    
+    try {
+      // Wait for Firebase to initialize
+      await new Promise(resolve => {
+        const checkReady = () => {
+          if (window.reportManager) {
+            resolve();
+          } else {
+            setTimeout(checkReady, 100);
+          }
+        };
+        checkReady();
+      });
+      
+      // Extract title from description (first sentence or first 50 chars)
+      const title = description.split('.')[0].substring(0, 50) + (description.length > 50 ? '...' : '');
+      
+      // Get selected tags
+      const selectedTags = Array.from(document.querySelectorAll('.tag')).map(tag => tag.textContent.replace('close', '').trim());
+      
+      // Create report data
+      const reportData = {
+        title: title,
+        description: description,
+        location: 'New York, NY', // You can make this dynamic later
+        status: 'Reported',
+        tags: selectedTags,
+        likes: 0,
+        bookmarks: 0,
+        shares: 0,
+        imageUrl: null // You can add image upload functionality later
+      };
+      
+      // Save to Firebase
+      await window.reportManager.addReport(reportData);
+      
+      // Success feedback
+      alert('Report submitted successfully!');
+      
+      // Reset form
+      descriptionInput.value = '';
+      
+      // Redirect to home page
+      window.location.href = './index.html';
+      
+    } catch (error) {
+      console.error('Error submitting report:', error);
+      alert('Error submitting report. Please try again.');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit Post';
+    }
+  });
+});
+</script>
 </body>
 </html>

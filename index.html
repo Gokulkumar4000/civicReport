@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;700;900&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
 <link rel="stylesheet" href="./styles.css">
+<script type="module" src="./firebase-config.js"></script>
 </head>
 <body class="bg-background-dark">
 <div class="container">
@@ -35,88 +36,10 @@
 <h2 class="text-lg font-bold text-zinc-900">Recent Reports</h2>
 </div>
 </header>
-<main class="divide-y pb-16">
-<article class="article">
-<div class="p-4">
-<div class="relative">
-<img alt="Image of a car accident" class="w-full h-auto rounded-lg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKrRKwTR3s8QJ_JXCdwNU_kRxBiGJExextkaPgCJSBO9eoWxpCJ3GTlHqIyT3rke0YoEI8JRgyKnXvKHQPPt0rwxMgBO78asBaZ1kBmKxAH8fToVxEq5vtYDzMVg3znQzeLT6ZdwxtNArcEE5x4yICmNlFiNQkSueJY6nIDHed3FRdxCcD6Y15jCjKbzXSXECldieVOp9xx81j3usnP00e19Kzp9HFYNrJ2KEOkryIpxayhzKjgBc7V4UT9WlPWcClFQjoLupzln5F"/>
-<button class="absolute top-2 right-2 px-4 py-2 text-sm font-semibold text-zinc-900 bg-white rounded-full backdrop-blur-sm">Report</button>
+<main id="reports-container" class="divide-y pb-16">
+<div id="loading-state" class="p-4 text-center">
+<p class="text-zinc-500">Loading reports...</p>
 </div>
-<div class="pt-4">
-<h3 class="text-lg font-bold text-zinc-900">Car Accident</h3>
-<p class="mt-1 text-zinc-600"> A car accident occurred at the intersection of Main St and Oak Ave. Minor injuries reported. Traffic is congested. <button class="text-primary font-semibold">read more</button> </p>
-<p class="text-sm text-zinc-500 mt-1">123 Main St, San Francisco</p>
-</div>
-</div>
-<div class="flex justify-around py-2">
-<button class="flex items-center gap-2 px-3 py-2 text-zinc-600 hover-primary rounded-full">
-<span class="material-symbols-outlined">thumb_up</span>
-<span class="text-sm font-semibold">23</span>
-</button>
-<button class="flex items-center gap-2 px-3 py-2 text-zinc-600 hover-primary rounded-full">
-<span class="material-symbols-outlined">bookmark</span>
-<span class="text-sm font-semibold">12</span>
-</button>
-<button class="flex items-center gap-2 px-3 py-2 text-zinc-600 hover-primary rounded-full">
-<span class="material-symbols-outlined">share</span>
-<span class="text-sm font-semibold">5</span>
-</button>
-</div>
-</article>
-<article class="article">
-<div class="p-4">
-<div class="relative">
-<img alt="Image of a gas leak warning" class="w-full h-auto rounded-lg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnUiT9rIF35Tp9X5q01zN2BHDcQIpKRBFTRDSJlPvctZpCN-cFO6IRQCkLywHR0RuvsqD3NEBqlUdO8CWz4bU--AWEe2raQ5lzNRh4xOnuPKZqFCN0J3I0OWeosJUfhqvRyp7rmyiclVQZcREQ4qAkrWxTSRkplq2wiyHlRZttE8hpTtpYWckEgn_QrBaPPh1HJWngKKUi6NJvEDURj_odywrcTAW-StPSp8yDRl-64PETaABLyHP7Q0KjnEugISYlyceeBfMMQpmv"/>
-<button class="absolute top-2 right-2 px-4 py-2 text-sm font-semibold text-zinc-900 bg-white rounded-full backdrop-blur-sm">Report</button>
-</div>
-<div class="pt-4">
-<h3 class="text-lg font-bold text-zinc-900">Gas Leak</h3>
-<p class="mt-1 text-zinc-600"> A gas leak has been reported at 456 Elm St. Residents are advised to evacuate the area immediately. Emergency services are on site. <button class="text-primary font-semibold">read more</button> </p>
-<p class="text-sm text-zinc-500 mt-1">456 Elm St, San Francisco</p>
-</div>
-</div>
-<div class="flex justify-around py-2">
-<button class="flex items-center gap-2 px-3 py-2 text-zinc-600 hover-primary rounded-full">
-<span class="material-symbols-outlined">thumb_up</span>
-<span class="text-sm font-semibold">18</span>
-</button>
-<button class="flex items-center gap-2 px-3 py-2 text-zinc-600 hover-primary rounded-full">
-<span class="material-symbols-outlined">bookmark</span>
-<span class="text-sm font-semibold">8</span>
-</button>
-<button class="flex items-center gap-2 px-3 py-2 text-zinc-600 hover-primary rounded-full">
-<span class="material-symbols-outlined">share</span>
-<span class="text-sm font-semibold">3</span>
-</button>
-</div>
-</article>
-<article class="article">
-<div class="p-4">
-<div class="relative">
-<img alt="Image related to suspicious activity" class="w-full h-auto rounded-lg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAn_mm3MeI_4kCwnHnuzFQdj4FOtU4AXSz0vKSozz6NCc60k_CFggFTYRQgfepUYkMB2MOY7Yr5wyw7W3-yH3vYSGpbX0J2ublZ7EEPEdRjevos2HFShQBads8uJ-RLy7QS5xBfd7lrDKl-wiVWUOJDiSynZdg2KUgtItoZRH1iEuwuTTBCz1hJzETO015pCM4yKMx0tuXg8CjshJ258H-g4E_p6Y2kVDlg2OckAySHJHTKON3u9u7pLI9EN3BjqhUnd7ubqZSIlW6a"/>
-<button class="absolute top-2 right-2 px-4 py-2 text-sm font-semibold text-zinc-900 bg-white rounded-full backdrop-blur-sm">Report</button>
-</div>
-<div class="pt-4">
-<h3 class="text-lg font-bold text-zinc-900">Suspicious Activity</h3>
-<p class="mt-1 text-zinc-600"> Suspicious activity reported near the park. A group of individuals were seen loitering and behaving erratically. Police have been notified. <button class="text-primary font-semibold">read more</button> </p>
-<p class="text-sm text-zinc-500 mt-1">789 Pine St, San Francisco</p>
-</div>
-</div>
-<div class="flex justify-around py-2">
-<button class="flex items-center gap-2 px-3 py-2 text-zinc-600 hover-primary rounded-full">
-<span class="material-symbols-outlined">thumb_up</span>
-<span class="text-sm font-semibold">15</span>
-</button>
-<button class="flex items-center gap-2 px-3 py-2 text-zinc-600 hover-primary rounded-full">
-<span class="material-symbols-outlined">bookmark</span>
-<span class="text-sm font-semibold">10</span>
-</button>
-<button class="flex items-center gap-2 px-3 py-2 text-zinc-600 hover-primary rounded-full">
-<span class="material-symbols-outlined">share</span>
-<span class="text-sm font-semibold">2</span>
-</button>
-</div>
-</article>
 </main>
 <footer class="footer">
 <nav class="flex justify-around items-center h-16">
@@ -139,5 +62,90 @@
 </nav>
 </footer>
 </div>
+
+<script type="module">
+// Load and display reports from Firebase
+document.addEventListener('DOMContentLoaded', async function() {
+  const reportsContainer = document.getElementById('reports-container');
+  const loadingState = document.getElementById('loading-state');
+  
+  try {
+    // Wait for Firebase to initialize
+    await new Promise(resolve => {
+      const checkReady = () => {
+        if (window.reportManager) {
+          resolve();
+        } else {
+          setTimeout(checkReady, 100);
+        }
+      };
+      checkReady();
+    });
+
+    // Get reports from Firebase
+    const reports = await window.reportManager.getAllReports();
+    
+    // Clear loading state
+    loadingState.style.display = 'none';
+    
+    if (reports.length === 0) {
+      reportsContainer.innerHTML = '<div class="p-4 text-center"><p class="text-zinc-500">No reports found. <a href="./post.html" class="text-primary">Create your first report</a></p></div>';
+      return;
+    }
+    
+    // Display reports
+    reports.forEach(report => {
+      const article = document.createElement('article');
+      article.className = 'article';
+      
+      const statusColor = report.status === 'Solved' ? 'text-green-500' : 
+                         report.status === 'Pending' ? 'text-yellow-500' : 
+                         'text-blue-500';
+      
+      const createdDate = report.createdAt ? new Date(report.createdAt.toDate()).toLocaleDateString() : 'Unknown date';
+      
+      article.innerHTML = `
+        <div class="p-4">
+          <div class="relative">
+            ${report.imageUrl ? 
+              `<img alt="Report image" class="w-full h-auto rounded-lg" src="${report.imageUrl}"/>` :
+              `<div class="w-full h-40 bg-gray-300 rounded-lg flex items-center justify-center">
+                <span class="material-symbols-outlined text-gray-500 text-4xl">image</span>
+              </div>`
+            }
+            <button class="absolute top-2 right-2 px-4 py-2 text-sm font-semibold text-zinc-900 bg-white rounded-full backdrop-blur-sm">Report</button>
+          </div>
+          <div class="pt-4">
+            <h3 class="text-lg font-bold text-zinc-900">${report.title || 'Untitled Report'}</h3>
+            <p class="mt-1 text-zinc-600">${report.description || 'No description provided'} <button class="text-primary font-semibold">read more</button></p>
+            <p class="text-sm text-zinc-500 mt-1">${report.location || 'Location not specified'}</p>
+            <p class="text-xs ${statusColor} mt-1">Status: ${report.status || 'Reported'} • ${createdDate}</p>
+          </div>
+        </div>
+        <div class="flex justify-around py-2">
+          <button class="flex items-center gap-2 px-3 py-2 text-zinc-600 hover-primary rounded-full">
+            <span class="material-symbols-outlined">thumb_up</span>
+            <span class="text-sm font-semibold">${report.likes || 0}</span>
+          </button>
+          <button class="flex items-center gap-2 px-3 py-2 text-zinc-600 hover-primary rounded-full">
+            <span class="material-symbols-outlined">bookmark</span>
+            <span class="text-sm font-semibold">${report.bookmarks || 0}</span>
+          </button>
+          <button class="flex items-center gap-2 px-3 py-2 text-zinc-600 hover-primary rounded-full">
+            <span class="material-symbols-outlined">share</span>
+            <span class="text-sm font-semibold">${report.shares || 0}</span>
+          </button>
+        </div>
+      `;
+      
+      reportsContainer.appendChild(article);
+    });
+    
+  } catch (error) {
+    console.error('Error loading reports:', error);
+    loadingState.innerHTML = '<p class="text-red-500">Error loading reports. Please try again later.</p>';
+  }
+});
+</script>
 </body>
 </html>
