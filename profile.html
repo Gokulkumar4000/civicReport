@@ -122,16 +122,15 @@ document.addEventListener('DOMContentLoaded', async function() {
     checkReady();
   });
   
-  // Check authentication
-  setTimeout(async () => {
-    if (!window.authManager.isAuthenticated()) {
-      alert('Please login to view your profile');
-      window.location.href = './login.html';
-      return;
-    }
-    
+  try {
+    // Wait for authentication state and require authentication
+    await window.authManager.requireAuth();
     await loadProfile();
-  }, 1000); // Give time for auth state to load
+  } catch (error) {
+    alert('Please login to view your profile');
+    window.location.href = './login.html';
+    return;
+  }
   
   async function loadProfile() {
     try {

@@ -24,18 +24,28 @@ class AuthManager {
   constructor() {
     this.currentUser = null;
     this.usersCollection = 'users';
-    this.setupAuthListener();
+    this.authStateReady = false;
+    this.authPromiseResolved = false;
+    this.authStatePromise = this.setupAuthListener();
   }
 
   // Set up authentication state listener
   setupAuthListener() {
-    onAuthStateChanged(auth, (user) => {
-      this.currentUser = user;
-      if (user) {
-        console.log('User signed in:', user.email);
-      } else {
-        console.log('User signed out');
-      }
+    return new Promise((resolve) => {
+      this.authStateReady = false;
+      onAuthStateChanged(auth, (user) => {
+        this.currentUser = user;
+        this.authStateReady = true;
+        if (user) {
+          console.log('User signed in:', user.email);
+        } else {
+          console.log('User signed out');
+        }
+        if (!this.authPromiseResolved) {
+          this.authPromiseResolved = true;
+          resolve(user);
+        }
+      });
     });
   }
 
@@ -53,7 +63,7 @@ class AuthManager {
         name: name,
         email: email,
         phone: phone,
-        aadharCard: aadharCard,
+        aadharCard: this.maskSensitiveData(aadharCard),
         profileVisible: true, // Default to visible
         profilePicture: null,
         createdAt: new Date(),
@@ -145,6 +155,26 @@ class AuthManager {
   // Get current user ID
   getCurrentUserId() {
     return this.currentUser ? this.currentUser.uid : null;
+  }
+
+  // Wait for auth state to be ready
+  async waitForAuthState() {
+    return this.authStatePromise;
+  }
+
+  // Mask sensitive data for security
+  maskSensitiveData(data) {
+    if (!data || data.length < 4) return '****';
+    return '****-****-' + data.slice(-4);
+  }
+
+  // Security guard: ensure user is authenticated before proceeding
+  async requireAuth() {
+    await this.waitForAuthState();
+    if (!this.isAuthenticated()) {
+      throw new Error('Authentication required. Please log in.');
+    }
+    return this.currentUser;
   }
 }
 

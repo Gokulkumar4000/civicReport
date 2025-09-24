@@ -91,31 +91,31 @@ Add Tag
 </div>
 
 <script type="module">
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
   const submitBtn = document.getElementById('submit-btn');
   const descriptionInput = document.getElementById('description-input');
   const immediateHelpToggle = document.getElementById('immediate-help-toggle');
   
-  // Wait for Firebase to initialize and check authentication
-  setTimeout(async () => {
-    await new Promise(resolve => {
-      const checkReady = () => {
-        if (window.authManager && window.reportManager) {
-          resolve();
-        } else {
-          setTimeout(checkReady, 100);
-        }
-      };
-      checkReady();
-    });
-    
-    // Check authentication
-    if (!window.authManager.isAuthenticated()) {
-      alert('Please login to create reports');
-      window.location.href = './login.html';
-      return;
-    }
-  }, 1000);
+  // Wait for Firebase to initialize and authenticate
+  await new Promise(resolve => {
+    const checkReady = () => {
+      if (window.authManager && window.reportManager) {
+        resolve();
+      } else {
+        setTimeout(checkReady, 100);
+      }
+    };
+    checkReady();
+  });
+  
+  try {
+    // Wait for authentication state and require authentication
+    await window.authManager.requireAuth();
+  } catch (error) {
+    alert('Please login to create reports');
+    window.location.href = './login.html';
+    return;
+  }
   
   submitBtn.addEventListener('click', async function(e) {
     e.preventDefault();

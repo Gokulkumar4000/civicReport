@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   const reportsContainer = document.getElementById('reports-container');
   const loadingState = document.getElementById('loading-state');
   
-  // Wait for Firebase to initialize
+  // Wait for Firebase to initialize and authenticate
   await new Promise(resolve => {
     const checkReady = () => {
       if (window.authManager && window.reportManager) {
@@ -85,15 +85,19 @@ document.addEventListener('DOMContentLoaded', async function() {
     checkReady();
   });
   
-  // Check authentication
-  setTimeout(() => {
-    if (!window.authManager.isAuthenticated()) {
-      window.location.href = './login.html';
-      return;
-    }
-  }, 1000); // Give time for auth state to load
+  try {
+    // Wait for authentication state to be ready and require authentication
+    await window.authManager.requireAuth();
+  } catch (error) {
+    console.log('Authentication required, redirecting to login');
+    window.location.href = './login.html';
+    return;
+  }
   
   try {
+    // Ensure authentication before loading reports
+    await window.authManager.requireAuth();
+    
     // Get reports from Firebase (sorted by immediate help first, then engagement)
     const reports = await window.reportManager.getAllReports();
     
